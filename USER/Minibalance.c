@@ -6,6 +6,7 @@
 u8 Flag_Left,Flag_Right,Flag_Direction=0;   //蓝牙遥控相关的变量
 u8 Flag_Stop=1,Flag_Show=0;                 //停止标志位和 显示标志位 默认停止 显示打开
 int Encoder_A,Encoder_B,Encoder_C;          //编码器的脉冲计数
+float Speed_A,Speed_B,Speed_C,Speed_Forward;					//编码器换算为速度
 long int Position_A,Position_B,Position_C,Rate_A,Rate_B,Rate_C; //PID控制相关变量
 int Encoder_A_EXTI;                       //通过外部中断读取的编码器数据                       
 long int Motor_A,Motor_B,Motor_C;        //电机PWM变量
@@ -51,13 +52,19 @@ int main(void)
 	MiniBalance_PWM_Init(7199,0);   //=====初始化PWM 10KHZ，用于驱动电机
 	delay_ms(1000);
 	
-	for(loopCounter=0;loopCounter<20;loopCounter++)						//延迟20秒使陀螺仪YAW角度稳定
+	for(loopCounter = 0; loopCounter < 400; loopCounter++)
 	{
-		delay_ms(1000);
-		delay_ms(1000);
+		delay_flag=1;	
+		delay_50=0;
+		while(delay_flag);	       //通过MPU6050的INT中断实现的1000ms精准延时	
 	}
-	Yaw_offset=Yaw;
-	Yaw_offset = 12;
+	
+	//for(loopCounter=0;loopCounter<20;loopCounter++)						//延迟20秒使陀螺仪YAW角度稳定
+	//{
+	//	delay_ms(1000);
+	//}
+	
+	Yaw_offset = Yaw;
 	
 	while(1)
 		{		

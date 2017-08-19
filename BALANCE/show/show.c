@@ -24,8 +24,7 @@ void oled_show(void)
 	
 	   OLED_ShowString(80,0,"Z:");
 		if(Yaw<0)		OLED_ShowNumber(95,0,Yaw+360,3,12);
-		//else					OLED_ShowNumber(95,0,Yaw,3,12);		
-		else					OLED_ShowNumber(95,0,Yaw_offset,3,12);	
+		else					OLED_ShowNumber(95,0,Yaw,3,12);			
 	  //=============第二行Z轴陀螺仪和目标速度===============//	
 			                    OLED_ShowString(00,10,"GZ");
 		if( gyro[2]<0)      	OLED_ShowString(20,10,"-"),
@@ -46,10 +45,14 @@ void oled_show(void)
 		else                 	OLED_ShowString(0,20,"+"),
 		                      OLED_ShowNumber(15,20, Target_A,5,12); 
 		
+		//if( Encoder_A<0)		OLED_ShowString(80,20,"-"),
+		//                      OLED_ShowNumber(95,20,-Encoder_A,4,12);
+		//else                 	OLED_ShowString(80,20,"+"),
+		//                      OLED_ShowNumber(95,20, Encoder_A,4,12);
 		if( Encoder_A<0)		OLED_ShowString(80,20,"-"),
-		                      OLED_ShowNumber(95,20,-Encoder_A,4,12);
+		                      OLED_ShowNumber(95,20,-Speed_Forward,4,12);
 		else                 	OLED_ShowString(80,20,"+"),
-		                      OLED_ShowNumber(95,20, Encoder_A,4,12);
+		                      OLED_ShowNumber(95,20, Speed_Forward,4,12);
  		//=============第4行显示电机B的状态=======================//	
 		  if( Target_B<0)		OLED_ShowString(00,30,"-"),
 		                      OLED_ShowNumber(15,30,-Target_B,5,12);
