@@ -49,7 +49,7 @@ void oled_show(void)
 		//                      OLED_ShowNumber(95,20,-Encoder_A,4,12);
 		//else                 	OLED_ShowString(80,20,"+"),
 		//                      OLED_ShowNumber(95,20, Encoder_A,4,12);
-		if( Encoder_A<0)		OLED_ShowString(80,20,"-"),
+		if( Encoder_B<0)		OLED_ShowString(80,20,"-"),
 		                      OLED_ShowNumber(95,20,-Speed_Forward,4,12);
 		else                 	OLED_ShowString(80,20,"+"),
 		                      OLED_ShowNumber(95,20, Speed_Forward,4,12);

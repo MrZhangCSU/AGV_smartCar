@@ -59,13 +59,13 @@ int EXTI15_10_IRQHandler(void)
 			return 0;	                                               
 			}                                                                   //===10ms控制一次，为了保证M法测速的时间基准，首先读取编码器数据
 			Encoder_A=Read_Encoder(2)/20;                                          //===读取编码器的值
-			Speed_A = Encoder_A * 0.01885;																			//换算为当前车轮的速度
+			Speed_A = Encoder_A *20 * 0.01885;																			//换算为当前车轮的速度
 			Position_A+=Encoder_A;                                              //===积分得到速度   
 			Encoder_B=Read_Encoder(3)/20;                                          //===读取编码器的值
-			Speed_B = Encoder_B * 0.01885;																			//换算为当前车轮的速度
+			Speed_B = Encoder_B * 20 * 0.01885;																			//换算为当前车轮的速度
 			Position_B+=Encoder_B;                                              //===积分得到速度   
 			Encoder_C=Read_Encoder(4)/20;                                          //===读取编码器的值
-			Speed_C = Encoder_C * 0.01885;																			//换算为当前车轮的速度
+			Speed_C = Encoder_C*20 * 0.01885 ;																			//换算为当前车轮的速度
 			Position_C+=Encoder_C;                                              //===积分得到速度
 			Speed_Forward = ( (Speed_B * Y_PARAMETER) + (Speed_C * Y_PARAMETER) ) / 2;
 	  	Read_DMP();                                                         //===更新姿态	
