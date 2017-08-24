@@ -40,39 +40,48 @@ void oled_show(void)
   if(Run_Flag==0)
   {		
 		//=============第3行显示电机A的状态=======================//	
-		  if( Target_A<0)		  OLED_ShowString(00,20,"-"),
+		if( Target_A<0)		  OLED_ShowString(00,20,"-"),
 		                      OLED_ShowNumber(15,20,-Target_A,5,12);
 		else                 	OLED_ShowString(0,20,"+"),
 		                      OLED_ShowNumber(15,20, Target_A,5,12); 
 		
-		//if( Encoder_A<0)		OLED_ShowString(80,20,"-"),
-		//                      OLED_ShowNumber(95,20,-Encoder_A,4,12);
-		//else                 	OLED_ShowString(80,20,"+"),
-		//                      OLED_ShowNumber(95,20, Encoder_A,4,12);
-		if( Encoder_B<0)		OLED_ShowString(80,20,"-"),
-		                      OLED_ShowNumber(95,20,-Speed_Forward,4,12);
+//		if( Encoder_A<0)		OLED_ShowString(80,20,"-"),
+//		                      OLED_ShowNumber(95,20,-Encoder_A,4,12);
+//		else                 	OLED_ShowString(80,20,"+"),
+//		                      OLED_ShowNumber(95,20, Encoder_A,4,12);
+		if( Encoder_A<0)		OLED_ShowString(80,20,"-"),
+		                      OLED_ShowNumber(95,20, Speed_A,4,12);
 		else                 	OLED_ShowString(80,20,"+"),
-		                      OLED_ShowNumber(95,20, Speed_Forward,4,12);
+		                      OLED_ShowNumber(95,20, Speed_A,4,12);
  		//=============第4行显示电机B的状态=======================//	
 		  if( Target_B<0)		OLED_ShowString(00,30,"-"),
 		                      OLED_ShowNumber(15,30,-Target_B,5,12);
 		else                 	OLED_ShowString(0,30,"+"),
 		                      OLED_ShowNumber(15,30, Target_B,5,12); 
 		
+//		if( Encoder_B<0)		OLED_ShowString(80,30,"-"),
+//		                      OLED_ShowNumber(95,30,-Encoder_B,4,12);
+//		else                 	OLED_ShowString(80,30,"+"),
+//		                      OLED_ShowNumber(95,30, Encoder_B,4,12);	
 		if( Encoder_B<0)		OLED_ShowString(80,30,"-"),
-		                      OLED_ShowNumber(95,30,-Encoder_B,4,12);
+		                      OLED_ShowNumber(95,30, countTime,4,12);
 		else                 	OLED_ShowString(80,30,"+"),
-		                      OLED_ShowNumber(95,30, Encoder_B,4,12);	
+		                      OLED_ShowNumber(95,30, countTime,4,12);	
 		//=============第5行显示电机C的状态=======================//	
 		  if( Target_C<0)		OLED_ShowString(00,40,"-"),
 		                      OLED_ShowNumber(15,40,-Target_C,5,12);
 		else                 	OLED_ShowString(0,40,"+"),
 		                      OLED_ShowNumber(15,40, Target_C,5,12); 
 		
+//		if( Encoder_C<0)		OLED_ShowString(80,40,"-"),
+//		                      OLED_ShowNumber(95,40,-Encoder_C,4,12);
+//		else                 	OLED_ShowString(80,40,"+"),
+//		                      OLED_ShowNumber(95,40, Encoder_C,4,12);
 		if( Encoder_C<0)		OLED_ShowString(80,40,"-"),
-		                      OLED_ShowNumber(95,40,-Encoder_C,4,12);
+		                      OLED_ShowNumber(95,40, Speed_C,4,12);
 		else                 	OLED_ShowString(80,40,"+"),
-		                      OLED_ShowNumber(95,40, Encoder_C,4,12);
+		                      OLED_ShowNumber(95,40, Speed_C,4,12);
+		
 	}
 	else if(Run_Flag==1)
   {		
@@ -142,7 +151,8 @@ void APP_Show(void)
    else	if(flag==0)// 
    printf("{A%d:%d:%d:%d}$",(u8)app_2,(u8)app_3,app_4,0); //打印到APP上面
 	 else
-	 printf("{B%d:%d:%d:%d}$",(int)Pitch,(int)Roll,(int)Yaw,app_4);//打印到APP上面 显示波形
+		 printf("{B%d:%d:%d:%d:%f}$",(int)Pitch,(int)Roll,(int)Yaw,app_4,Speed_Forward);//打印到APP上面 显示波形
+//	 printf("{B%d:%d:%d:%d}$",(int)Pitch,(int)Roll,(int)Yaw,app_4);//打印到APP上面 显示波形
 }
 /**************************************************************************
 函数功能：虚拟示波器往上位机发送数据 关闭显示屏
