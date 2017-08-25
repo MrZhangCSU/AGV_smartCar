@@ -95,9 +95,12 @@ int EXTI15_10_IRQHandler(void)
 			{		
 				if(CAN_ON_Flag==0&&Usart_ON_Flag==0)  Get_RC(Run_Flag);                //===串口和CAN控制都未使能，则接收蓝牙遥控指
 //				Motor_A=Incremental_PI_A(Encoder_A,Target_A);                         //===速度闭环控制计算电机A最终PWM
-				Motor_A=Incremental_PI_A((int)forwardDirection*10,(int)setForwardDirection*10);				//进行前进时候的直线调整
-				Motor_B=Incremental_PI_B(Encoder_B,Target_B);                         //===速度闭环控制计算电机B最终PWM
-				Motor_C=Incremental_PI_C(Encoder_C,Target_C);                         //===速度闭环控制计算电机C最终PWM
+				if( controlFlag == 1)
+				{
+					Motor_A= directionMotorControl((int)forwardDirection*10,(int)setForwardDirection*10);				//进行前进时候的直线调整
+					Motor_B=Incremental_PI_B(Encoder_B,Target_B);                         //===速度闭环控制计算电机B最终PWM
+					Motor_C=Incremental_PI_C(Encoder_C,Target_C);                         //===速度闭环控制计算电机C最终PWM
+				}
 			}
 			 else//位置模式
 			{
@@ -402,4 +405,15 @@ void CAN_N_Usart_Control(void)
 	
    if(rxbuf[0]==1)Kinematic_Analysis(Move_X,Move_Y,Move_Z),Gyro_K=0;    //进行运动学分析
 	 if(rxbuf[0]==2)Target_A=Move_X,Target_B=Move_Y,Target_C=Move_Z;      //单独对每个电机进行控制
+}
+
+int directionMotorControl(int Encoder,int Target)
+{ 	
+	 static int Bias,Pwm,Last_bias;
+	 Bias=Target-Encoder;                //计算偏差
+	 Pwm+=50*(Bias-Last_bias)+Bias;   //增量式PI控制器
+	 if(Pwm>7200)Pwm=7200;
+	 if(Pwm<-7200)Pwm=-7200;
+	 Last_bias=Bias;	                   //保存上一次偏差 
+	 return Pwm;                         //增量输出
 }

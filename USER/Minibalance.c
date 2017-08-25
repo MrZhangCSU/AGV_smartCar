@@ -8,6 +8,7 @@ u8 Flag_Stop=1,Flag_Show=0;                 //Í£Ö¹±êÖ¾Î»ºÍ ÏÔÊ¾±êÖ¾Î» Ä¬ÈÏÍ£Ö¹ Ï
 int Encoder_A,Encoder_B,Encoder_C;          //±àÂëÆ÷µÄÂö³å¼ÆÊı
 float Speed_A,Speed_B,Speed_C,Speed_Forward,LocationX,LocationY;					//±àÂëÆ÷»»ËãÎªËÙ¶È
 int countTime;
+int controlFlag;														//½øĞĞ¿ØÖÆ±êÖ¾Î»
 long int Position_A,Position_B,Position_C,Rate_A,Rate_B,Rate_C; //PID¿ØÖÆÏà¹Ø±äÁ¿
 int Encoder_A_EXTI;                       //Í¨¹ıÍâ²¿ÖĞ¶Ï¶ÁÈ¡µÄ±àÂëÆ÷Êı¾İ                       
 long int Motor_A,Motor_B,Motor_C;        //µç»úPWM±äÁ¿
@@ -67,6 +68,9 @@ int main(void)
 	
 	Yaw_offset = Yaw;
 	setForwardDirection = 0;
+	delay_flag=1;	
+	delay_50=0;
+	while(delay_flag);	       //Í¨¹ıMPU6050µÄINTÖĞ¶ÏÊµÏÖµÄ1000ms¾«×¼ÑÓÊ±	
 	
 	while(1)
 		{		
@@ -84,6 +88,7 @@ int main(void)
   		{
 				DataScope();             //¿ªÆôMiniBalanceÉÏÎ»»ú
 			}	
+			if(controlFlag == 0 ) controlFlag = 1;				//ÊÇ·ñÖ±ĞĞÖĞ¶Ïµç»ú¿ØÖÆ±êÖ¾Î»
 			delay_flag=1;	
 			delay_50=0;
 			while(delay_flag);	       //Í¨¹ıMPU6050µÄINTÖĞ¶ÏÊµÏÖµÄ50ms¾«×¼ÑÓÊ±				

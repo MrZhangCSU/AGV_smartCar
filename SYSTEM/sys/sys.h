@@ -89,6 +89,7 @@ extern int Encoder_A,Encoder_B,Encoder_C;                    //编码器的脉冲计数
 extern float Speed_A,Speed_B,Speed_C,Speed_Forward,LocationX,LocationY;					//编码器换算为速度
 extern int countTime;
 extern long int Motor_A,Motor_B,Motor_C;                   //电机PWM变量
+extern int controlFlag;
 extern u8 Flag_Left,Flag_Right,Flag_sudu,Flag_Direction; //蓝牙遥控相关的变量
 extern u8 Flag_Stop,Flag_Show;                               //停止标志位和 显示标志位 默认停止 显示打开
 extern long int Target_A,Target_B,Target_C,Rate_A,Rate_B,Rate_C;                      //电机目标速度

@@ -21,6 +21,7 @@ u32 myabs(long int a);
 int Incremental_PI_A (int Encoder,int Target);
 int Incremental_PI_B (int Encoder,int Target);
 int Incremental_PI_C (int Encoder,int Target);
+int directionMotorControl (int Encoder,int Target);
 int Position_PID_A (int Encoder,int Target);
 int Position_PID_B (int Encoder,int Target);
 int Position_PID_C (int Encoder,int Target);
