@@ -18,7 +18,7 @@ u8 delay_50,delay_flag;                          //延时相关变量
 u8 Run_Flag=0;  //蓝牙遥控相关变量和运行状态标志位
 u8 rxbuf[8],Urxbuf[8],CAN_ON_Flag=0,Usart_ON_Flag=0,Usart_Flag,PID_Send,Flash_Send;  //CAN和串口控制相关变量
 u8 txbuf[8],txbuf2[8],Turn_Flag;             //CAN发送相关变量
-float Pitch,Roll,Yaw,Move_X,Move_Y,Move_Z,Yaw_offset;   //三轴角度和XYZ轴目标速度
+float Pitch,Roll,Yaw,Move_X,Move_Y,Move_Z,Yaw_offset,forwardDirection,setForwardDirection;   //三轴角度和XYZ轴目标速度
 u16 PID_Parameter[10],Flash_Parameter[10];  //Flash相关数组
 float	Position_KP=40,Position_KI=0,Position_KD=40;  //位置控制PID参数
 float Velocity_KP=10,Velocity_KI=10;	          //速度控制PID参数
@@ -66,6 +66,7 @@ int main(void)
 	//}
 	
 	Yaw_offset = Yaw;
+	setForwardDirection = 0;
 	
 	while(1)
 		{		

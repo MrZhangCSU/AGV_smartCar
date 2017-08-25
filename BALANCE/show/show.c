@@ -23,8 +23,10 @@ void oled_show(void)
 		else					OLED_ShowNumber(55,0,Roll,3,12);	
 	
 	   OLED_ShowString(80,0,"Z:");
-		if(Yaw<0)		OLED_ShowNumber(95,0,Yaw+360,3,12);
-		else					OLED_ShowNumber(95,0,Yaw,3,12);			
+		if(forwardDirection<0)		OLED_ShowNumber(95,0,forwardDirection+360,3,12);
+		else					OLED_ShowNumber(95,0,forwardDirection,3,12);	
+//		if(Yaw<0)		OLED_ShowNumber(95,0,forwardDirection+360,3,12);
+//		else					OLED_ShowNumber(95,0,forwardDirection,3,12);		
 	  //=============第二行Z轴陀螺仪和目标速度===============//	
 			                    OLED_ShowString(00,10,"GZ");
 		if( gyro[2]<0)      	OLED_ShowString(20,10,"-"),

@@ -86,7 +86,8 @@
 #define SWD_ENABLE         0X01
 #define JTAG_SWD_ENABLE    0X00	
 extern int Encoder_A,Encoder_B,Encoder_C;                    //编码器的脉冲计数
-extern float Speed_A,Speed_B,Speed_C,Speed_Forward;					//编码器换算为速度
+extern float Speed_A,Speed_B,Speed_C,Speed_Forward,LocationX,LocationY;					//编码器换算为速度
+extern int countTime;
 extern long int Motor_A,Motor_B,Motor_C;                   //电机PWM变量
 extern u8 Flag_Left,Flag_Right,Flag_sudu,Flag_Direction; //蓝牙遥控相关的变量
 extern u8 Flag_Stop,Flag_Show;                               //停止标志位和 显示标志位 默认停止 显示打开
@@ -102,7 +103,7 @@ extern int RC_Velocity,RC_Position;
 extern int Encoder_A_EXTI;
 extern u8 Run_Flag,PID_Send,Flash_Send,Turn_Flag;
 extern u8 rxbuf[8],Urxbuf[8],txbuf[8],txbuf2[8],CAN_ON_Flag,Usart_ON_Flag,Usart_Flag;
-extern float Pitch,Roll,Yaw,Move_X,Move_Y,Move_Z,Yaw_offset; 
+extern float Pitch,Roll,Yaw,Move_X,Move_Y,Move_Z,Yaw_offset,forwardDirection,setForwardDirection; 
 extern long int Position_A,Position_B,Position_C;
 extern u16 PID_Parameter[10],Flash_Parameter[10];
 extern float	Position_KP,Position_KI,Position_KD;  //位置控制PID参数
