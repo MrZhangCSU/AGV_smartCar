@@ -49,3 +49,14 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+OBJ/adc.crf
+*.crf
+*.crf
+*.crf
+*.crf
+*.crf
+*.crf
+*.crf
+*.crf
+*.crf
+*.__i
