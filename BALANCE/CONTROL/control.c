@@ -79,10 +79,14 @@ int EXTI15_10_IRQHandler(void)
 			
 			
 			
-			GoForwardFlag = 1;
-			LocationX += Speed_Forward * 0.015;										//积分得到当前位置
-			if ( LocationX > 1 )
-				Flag_Direction=0,LocationX=0;
+//			GoForwardFlag = 1;
+//			LocationX += Speed_Forward * 0.015;										//积分得到当前位置
+//			if ( LocationX > 1 )
+//				Flag_Direction=0,LocationX=0;
+			
+			GoForwardFlag = 2;
+			if (forwardDirection >= setForwardDirection)
+				Flag_Direction = 0,Flag_Left = 0;
 			
 			
 			Read_DMP();                                                         //===更新姿态	
@@ -108,7 +112,9 @@ int EXTI15_10_IRQHandler(void)
 					}
 					else if(GoForwardFlag == 2)
 					{
-						//Waitting for making it full
+						Motor_A=Incremental_PI_A(Encoder_A,Target_A);                         //===速度闭环控制计算电机A最终PWM
+						Motor_B=Incremental_PI_B(Encoder_B,Target_B);                         //===速度闭环控制计算电机B最终PWM
+						Motor_C=Incremental_PI_C(Encoder_C,Target_C);                         //===速度闭环控制计算电机C最终PWM
 					}
 				}
 			}
