@@ -9,6 +9,7 @@ int Encoder_A,Encoder_B,Encoder_C;          //编码器的脉冲计数
 float Speed_A,Speed_B,Speed_C,Speed_Forward,LocationX,LocationY;					//编码器换算为速度
 int countTime;
 int controlFlag;														//进行控制标志位
+int GoForwardFlag;
 long int Position_A,Position_B,Position_C,Rate_A,Rate_B,Rate_C; //PID控制相关变量
 int Encoder_A_EXTI;                       //通过外部中断读取的编码器数据                       
 long int Motor_A,Motor_B,Motor_C;        //电机PWM变量
@@ -61,16 +62,13 @@ int main(void)
 		while(delay_flag);	       //通过MPU6050的INT中断实现的1000ms精准延时	
 	}
 	
-	//for(loopCounter=0;loopCounter<20;loopCounter++)						//延迟20秒使陀螺仪YAW角度稳定
-	//{
-	//	delay_ms(1000);
-	//}
-	
 	Yaw_offset = Yaw;
 	setForwardDirection = 0;
+	//setForwardDirection = 90;
 	delay_flag=1;	
 	delay_50=0;
-	while(delay_flag);	       //通过MPU6050的INT中断实现的1000ms精准延时	
+	while(delay_flag);	       //通过MPU6050的INT中断实现的50ms精准延时	
+	GoForwardFlag = 1;
 	
 	while(1)
 		{		
@@ -88,7 +86,8 @@ int main(void)
   		{
 				DataScope();             //开启MiniBalance上位机
 			}	
-			if(controlFlag == 0 ) controlFlag = 1;				//是否直行中断电机控制标志位
+			if(controlFlag == 0 ) controlFlag += 1;				//是否直行中断电机控制标志位
+			if(controlFlag <= 1) Flag_Direction = 1 ,controlFlag += 1;    //Flag_Left = 1, controlFlag +=1;
 			delay_flag=1;	
 			delay_50=0;
 			while(delay_flag);	       //通过MPU6050的INT中断实现的50ms精准延时				

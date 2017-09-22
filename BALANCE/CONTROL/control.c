@@ -77,8 +77,11 @@ int EXTI15_10_IRQHandler(void)
 //			Speed_Forward = ( ( Speed_B) * Y_PARAMETER +( Speed_C ) * Y_PARAMETER) *0.0122 /2;
 			Speed_Forward = ( ( Speed_B) * Y_PARAMETER + Speed_C * Y_PARAMETER ) *0.0125 / 2;
 			
+			
+			
+			GoForwardFlag = 1;
 			LocationX += Speed_Forward * 0.015;										//积分得到当前位置
-			if ( LocationX > 4 )
+			if ( LocationX > 1 )
 				Flag_Direction=0,LocationX=0;
 			
 			
@@ -95,11 +98,18 @@ int EXTI15_10_IRQHandler(void)
 			{		
 				if(CAN_ON_Flag==0&&Usart_ON_Flag==0)  Get_RC(Run_Flag);                //===串口和CAN控制都未使能，则接收蓝牙遥控指
 //				Motor_A=Incremental_PI_A(Encoder_A,Target_A);                         //===速度闭环控制计算电机A最终PWM
-				if( controlFlag == 1)
+				if( controlFlag > 0)
 				{
-					Motor_A= directionMotorControl((int)forwardDirection*10,(int)setForwardDirection*10);				//进行前进时候的直线调整
-					Motor_B=Incremental_PI_B(Encoder_B,Target_B);                         //===速度闭环控制计算电机B最终PWM
-					Motor_C=Incremental_PI_C(Encoder_C,Target_C);                         //===速度闭环控制计算电机C最终PWM
+					if(GoForwardFlag == 1)
+					{
+						Motor_A= directionMotorControl((int)forwardDirection*10,(int)setForwardDirection*10);				//进行前进时候的直线调整
+						Motor_B=Incremental_PI_B(Encoder_B,Target_B);                         //===速度闭环控制计算电机B最终PWM
+						Motor_C=Incremental_PI_C(Encoder_C,Target_C);                         //===速度闭环控制计算电机C最终PWM
+					}
+					else if(GoForwardFlag == 2)
+					{
+						//Waitting for making it full
+					}
 				}
 			}
 			 else//位置模式
@@ -416,4 +426,11 @@ int directionMotorControl(int Encoder,int Target)
 	 if(Pwm<-7200)Pwm=-7200;
 	 Last_bias=Bias;	                   //保存上一次偏差 
 	 return Pwm;                         //增量输出
+}
+
+float adjustAngle(float angle)
+{
+	if(angle>162) angle -=360;    // -197...+162
+	if (angle < -197) angle +=360;
+	return angle;
 }
