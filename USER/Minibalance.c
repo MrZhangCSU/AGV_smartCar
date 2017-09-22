@@ -5,6 +5,7 @@
 **************************************************************************/ 
 u8 Flag_Left,Flag_Right,Flag_Direction=0;   //蓝牙遥控相关的变量
 u8 Flag_Stop=1,Flag_Show=0;                 //停止标志位和 显示标志位 默认停止 显示打开
+int lineStopFlag,rotateStopFlag;	
 int Encoder_A,Encoder_B,Encoder_C;          //编码器的脉冲计数
 float Speed_A,Speed_B,Speed_C,Speed_Forward,LocationX,LocationY;					//编码器换算为速度
 int countTime;
@@ -63,12 +64,14 @@ int main(void)
 	}
 	
 	Yaw_offset = Yaw;
-	//setForwardDirection = 0;
-	setForwardDirection = 90;
+	setForwardDirection = 0;
+	//setForwardDirection = 90;
 	delay_flag=1;	
 	delay_50=0;
 	while(delay_flag);	       //通过MPU6050的INT中断实现的50ms精准延时	
 	GoForwardFlag = 1;
+	lineStopFlag = 0;
+	rotateStopFlag = 0;
 	
 	while(1)
 		{		
@@ -87,7 +90,7 @@ int main(void)
 				DataScope();             //开启MiniBalance上位机
 			}	
 			if(controlFlag == 0 ) controlFlag += 1;				//是否直行中断电机控制标志位
-			if(controlFlag <= 1) 	Flag_Left = 1, controlFlag +=1;   //Flag_Direction = 1 ,controlFlag += 1;    //
+			if(controlFlag <= 1) 	Flag_Direction = 1 , Flag_Left = 0 , Flag_Right = 0 , controlFlag += 1;    //Flag_Left = 1, controlFlag +=1;
 			delay_flag=1;	
 			delay_50=0;
 			while(delay_flag);	       //通过MPU6050的INT中断实现的50ms精准延时				

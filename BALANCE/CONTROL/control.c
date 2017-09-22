@@ -78,16 +78,46 @@ int EXTI15_10_IRQHandler(void)
 			Speed_Forward = ( ( Speed_B) * Y_PARAMETER + Speed_C * Y_PARAMETER ) *0.0125 / 2;
 			
 			
+			if (GoForwardFlag == 1)
+			{
+				LocationX += Speed_Forward * 0.015;										//积分得到当前位置
+				if ( LocationX > 1 )
+					Flag_Direction=0,LocationX=0,lineStopFlag = 1;
+				if (lineStopFlag == 1)
+				{
+					lineStopFlag = 0;
+					Flag_Left=1;
+					Flag_Right=0;
+					GoForwardFlag=2;
+					setForwardDirection += 90;
+					setForwardDirection = adjustAngle(setForwardDirection);	
+				}
+			}
+			else if(GoForwardFlag == 2)
+			{
+				if ((forwardDirection>0)&&(setForwardDirection <0))						//避免在交界点出问题
+					forwardDirection -= 360;
+				if (forwardDirection >= setForwardDirection)
+				{
+					Flag_Left = 0;
+				}
+				if(Flag_Left == 0)
+				{
+					Flag_Direction =1;
+					GoForwardFlag = 1;
+					LocationX = 0;
+				}
+			}				
 			
 //			GoForwardFlag = 1;
 //			LocationX += Speed_Forward * 0.015;										//积分得到当前位置
 //			if ( LocationX > 1 )
 //				Flag_Direction=0,LocationX=0;
 			
-			GoForwardFlag = 2;
-			if (forwardDirection >= setForwardDirection)
-				Flag_Direction = 0,Flag_Left = 0;
-			
+//			GoForwardFlag = 2;
+//			if (forwardDirection >= setForwardDirection)
+//				Flag_Direction = 0,Flag_Left = 0;
+//			
 			
 			Read_DMP();                                                         //===更新姿态	
   		Led_Flash(100);                                                     //===LED闪烁;常规模式 1s改变一次指示灯的状态	
