@@ -78,48 +78,63 @@ int EXTI15_10_IRQHandler(void)
 			Speed_Forward = ( ( Speed_B) * Y_PARAMETER + Speed_C * Y_PARAMETER ) *0.0125 / 2;
 			
 			
-			if (GoForwardFlag == 1)
+//			if (GoForwardFlag == 1)
+//			{
+//				LocationX += Speed_Forward * 0.015;										//积分得到当前位置
+//				if ( LocationX > 1 )
+//					Flag_Direction=0,LocationX=0,lineStopFlag = 1;
+//				if (lineStopFlag == 1)
+//				{
+//					lineStopFlag = 0;
+//					Flag_Left=1;
+//					Flag_Right=0;
+//					GoForwardFlag=2;
+//					setForwardDirection += 90;
+//					setForwardDirection = adjustAngle(setForwardDirection);	
+//				}
+//			}
+//			else if(GoForwardFlag == 2)
+//			{
+//				if ((forwardDirection>0)&&(setForwardDirection <0))						//避免在交界点出问题
+//					forwardDirection -= 360;
+//				if (forwardDirection >= setForwardDirection)
+//				{
+//					Flag_Left = 0;
+//				}
+//				if(Flag_Left == 0)
+//				{
+//					Flag_Direction =1;
+//					GoForwardFlag = 1;
+//					LocationX = 0;
+//				}
+//			}				
+
+
+			Read_DMP();  																									//===更新姿态	
+			LocationX += cos(forwardDirection*3.14159/180) * Speed_Forward * 0.015;
+			LocationY += sin(forwardDirection*3.14159/180) * Speed_Forward * 0.015;
+			setForwardDirection  = atan2( setLocationY[countNumber] - LocationY , setLocationX[countNumber] - LocationX ) * 57.3;
+			setForwardDirection = adjustAngle(setForwardDirection);	
+			if( (LocationX > setLocationX[countNumber]) || (LocationY < setLocationY[countNumber]) )
 			{
-				LocationX += Speed_Forward * 0.015;										//积分得到当前位置
-				if ( LocationX > 1 )
-					Flag_Direction=0,LocationX=0,lineStopFlag = 1;
-				if (lineStopFlag == 1)
-				{
-					lineStopFlag = 0;
-					Flag_Left=1;
-					Flag_Right=0;
-					GoForwardFlag=2;
-					setForwardDirection += 90;
-					setForwardDirection = adjustAngle(setForwardDirection);	
-				}
+				countNumber++;
+				if(countNumber >= 2)
+					Flag_Direction = 0;
 			}
-			else if(GoForwardFlag == 2)
-			{
-				if ((forwardDirection>0)&&(setForwardDirection <0))						//避免在交界点出问题
-					forwardDirection -= 360;
-				if (forwardDirection >= setForwardDirection)
-				{
-					Flag_Left = 0;
-				}
-				if(Flag_Left == 0)
-				{
-					Flag_Direction =1;
-					GoForwardFlag = 1;
-					LocationX = 0;
-				}
-			}				
 			
-//			GoForwardFlag = 1;
-//			LocationX += Speed_Forward * 0.015;										//积分得到当前位置
-//			if ( LocationX > 1 )
-//				Flag_Direction=0,LocationX=0;
+//			if( (LocationX>setLocationX[1]) || (LocationY<setLocationY[1]) )
+//			{
+//				countNumber++;
+//					Flag_Direction = 0;
+//			}
+
+
+
+
+
 			
-//			GoForwardFlag = 2;
-//			if (forwardDirection >= setForwardDirection)
-//				Flag_Direction = 0,Flag_Left = 0;
-//			
-			
-			Read_DMP();                                                         //===更新姿态	
+	
+			//Read_DMP();                                                         //===更新姿态	
   		Led_Flash(100);                                                     //===LED闪烁;常规模式 1s改变一次指示灯的状态	
 			Voltage_All+=Get_battery_volt();                                    //多次采样累积
 			if(++Voltage_Count==100) Voltage=Voltage_All/100,Voltage_All=0,Voltage_Count=0;//求平均值 获取电池电压	       
@@ -167,7 +182,9 @@ int EXTI15_10_IRQHandler(void)
 					Motor_B=Incremental_PI_B(Encoder_B,-Motor_B);         //===速度闭环控制计算电机B最终PWM
 					Motor_C=Incremental_PI_C(Encoder_C,-Motor_C);         //===速度闭环控制计算电机C最终PWM
 			}	 
-		 Xianfu_Pwm(6900);                     //===PWM限幅
+		 //Xianfu_Pwm(6900);                     //===PWM限幅
+			Xianfu_Pwm_A(1500);
+			Xianfu_Pwm_BC(5000);
 		 Set_Pwm(Motor_A,Motor_B,Motor_C);     //===赋值给PWM寄存器  
 		 }
  }
@@ -469,4 +486,18 @@ float adjustAngle(float angle)
 	if(angle>162) angle -=360;    // -197...+162
 	if (angle < -197) angle +=360;
 	return angle;
+}
+
+void Xianfu_Pwm_BC(int amplitude)
+{	
+	  if(Motor_B<-amplitude) Motor_B=-amplitude;	
+		if(Motor_B>amplitude)  Motor_B=amplitude;		
+	  if(Motor_C<-amplitude) Motor_C=-amplitude;	
+		if(Motor_C>amplitude)  Motor_C=amplitude;		
+}
+
+void Xianfu_Pwm_A(int amplitude)
+{	
+    if(Motor_A<-amplitude) Motor_A=-amplitude;	
+		if(Motor_A>amplitude)  Motor_A=amplitude;			
 }

@@ -8,7 +8,8 @@ u8 Flag_Stop=1,Flag_Show=0;                 //Í£Ö¹±êÖ¾Î»ºÍ ÏÔÊ¾±êÖ¾Î» Ä¬ÈÏÍ£Ö¹ Ï
 int lineStopFlag,rotateStopFlag;	
 int Encoder_A,Encoder_B,Encoder_C;          //±àÂëÆ÷µÄÂö³å¼ÆÊı
 float Speed_A,Speed_B,Speed_C,Speed_Forward,LocationX,LocationY;					//±àÂëÆ÷»»ËãÎªËÙ¶È
-int countTime;
+float setLocationX[2],setLocationY[2];						//×ªÍä½Úµã±£´æÊı×é
+int countTime,countNumber;
 int controlFlag;														//½øĞĞ¿ØÖÆ±êÖ¾Î»
 int GoForwardFlag;
 long int Position_A,Position_B,Position_C,Rate_A,Rate_B,Rate_C; //PID¿ØÖÆÏà¹Ø±äÁ¿
@@ -72,6 +73,11 @@ int main(void)
 	GoForwardFlag = 1;
 	lineStopFlag = 0;
 	rotateStopFlag = 0;
+	countNumber = 0;
+	setLocationX[0] = 0.707;
+	setLocationX[1] = 1;
+	setLocationY[0] = -0.293;
+	setLocationY[1] = -1;
 	
 	while(1)
 		{		

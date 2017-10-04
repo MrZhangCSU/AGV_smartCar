@@ -29,4 +29,6 @@ void Get_RC(u8 mode);
 void Count_Velocity(void);
 void CAN_N_Usart_Control(void);
 float adjustAngle(float angle);
+void Xianfu_Pwm_BC(int amplitude);
+void Xianfu_Pwm_A(int amplitude);
 #endif

@@ -87,7 +87,8 @@
 #define JTAG_SWD_ENABLE    0X00	
 extern int Encoder_A,Encoder_B,Encoder_C;                    //编码器的脉冲计数
 extern float Speed_A,Speed_B,Speed_C,Speed_Forward,LocationX,LocationY;					//编码器换算为速度
-extern int countTime;
+extern float setLocationX[2],setLocationY[2];
+extern int countTime,countNumber;
 extern long int Motor_A,Motor_B,Motor_C;                   //电机PWM变量
 extern int controlFlag;
 extern int GoForwardFlag;																	//等于1=前进标志、等于2==转向标志
