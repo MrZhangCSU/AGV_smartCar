@@ -79,25 +79,25 @@ int main(void)
 //	setLocationY[0] = -0.293;
 //	setLocationY[1] = -1;
 	
-//	setLocationX[0] = 0.259;			//分成6段
-//	setLocationX[1] = 0.5;
-//	setLocationX[2] = 0.707;
-//	setLocationX[3] = 0.866;
-//	setLocationX[4] = 0.965;
-//	setLocationX[5] = 1;
-//	setLocationY[0] = -0.034;
-//	setLocationY[1] = -0.134;
-//	setLocationY[2] = -0.5;
-//	setLocationY[3] = -0.741;
-//	setLocationY[4] = -0.965;
-//	setLocationY[5] = -1;
+	setLocationX[0] = 0.259;			//分成6段
+	setLocationX[1] = 0.5;
+	setLocationX[2] = 0.707;
+	setLocationX[3] = 0.866;
+	setLocationX[4] = 0.965;
+	setLocationX[5] = 1;
+	setLocationY[0] = -0.034;
+	setLocationY[1] = -0.134;
+	setLocationY[2] = -0.5;
+	setLocationY[3] = -0.741;
+	setLocationY[4] = -0.965;
+	setLocationY[5] = -1;
 
-	setLocationX[0] = 0.5;			//分成3段
-	setLocationX[1] = 0.866;
-	setLocationX[2] = 1;
-	setLocationY[0] = -0.134;
-	setLocationY[1] = -0.5;
-	setLocationY[2] = -1;
+//	setLocationX[0] = 0.5;			//分成3段
+//	setLocationX[1] = 0.866;
+//	setLocationX[2] = 1;
+//	setLocationY[0] = -0.134;
+//	setLocationY[1] = -0.5;
+//	setLocationY[2] = -1;
 
 	
 	while(1)

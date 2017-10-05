@@ -77,10 +77,9 @@ int EXTI15_10_IRQHandler(void)
 //			Speed_Forward = ( ( Speed_B) * Y_PARAMETER +( Speed_C ) * Y_PARAMETER) *0.0122 /2;
 			Speed_Forward = ( ( Speed_B) * Y_PARAMETER + Speed_C * Y_PARAMETER ) *0.0125 / 2;
 			
-			
 //			if (GoForwardFlag == 1)
 //			{
-//				LocationX += Speed_Forward * 0.015;										//积分得到当前位置
+//				LocationX += Speed_Forward * 0.015;										//????????
 //				if ( LocationX > 1 )
 //					Flag_Direction=0,LocationX=0,lineStopFlag = 1;
 //				if (lineStopFlag == 1)
@@ -95,7 +94,7 @@ int EXTI15_10_IRQHandler(void)
 //			}
 //			else if(GoForwardFlag == 2)
 //			{
-//				if ((forwardDirection>0)&&(setForwardDirection <0))						//避免在交界点出问题
+//				if ((forwardDirection>0)&&(setForwardDirection <0))						//?????????
 //					forwardDirection -= 360;
 //				if (forwardDirection >= setForwardDirection)
 //				{
@@ -107,22 +106,62 @@ int EXTI15_10_IRQHandler(void)
 //					GoForwardFlag = 1;
 //					LocationX = 0;
 //				}
-//			}				
-
-
-			Read_DMP();  																									//===更新姿态	
-			LocationX += cos(forwardDirection*3.14159/180) * Speed_Forward * 0.015;
-			LocationY += sin(forwardDirection*3.14159/180) * Speed_Forward * 0.015;
-
-
-			setForwardDirection  = atan2( setLocationY[countNumber] - LocationY , setLocationX[countNumber] - LocationX ) * 57.3;
-			//setForwardDirection = adjustAngle(setForwardDirection);	
-			if( (LocationX > setLocationX[countNumber]) || (LocationY < setLocationY[countNumber]) )
+//			}
+			
+			Read_DMP();  																									//===更新姿态				
+			if (GoForwardFlag == 1)
 			{
-				countNumber++;
-				if(countNumber > 3)
-					Flag_Direction = 0;
+				LocationX += cos(forwardDirection*3.14159/180) * Speed_Forward * 0.015;
+				LocationY += sin(forwardDirection*3.14159/180) * Speed_Forward * 0.015;
+				if( (LocationX > setLocationX[countNumber]) || (LocationY < setLocationY[countNumber]) )
+				{
+					Flag_Direction=0;
+					//LocationX=0;
+					lineStopFlag = 1;
+					countNumber++;
+					if(countNumber > 6)
+						GoForwardFlag = 0,Flag_Direction = 0;
+				}
+					
+				if (lineStopFlag == 1)
+				{
+					lineStopFlag = 0;
+					Flag_Left=0;
+					Flag_Right=1;
+					GoForwardFlag=2;
+					setForwardDirection  = atan2( setLocationY[countNumber] - LocationY , setLocationX[countNumber] - LocationX ) * 57.3;					
+					//setForwardDirection = adjustAngle(setForwardDirection);	
+				}
 			}
+			else if(GoForwardFlag == 2)
+			{
+				if ((forwardDirection>0)&&(setForwardDirection <0))						//避免在交界点出问题
+					forwardDirection -= 360;
+				if (forwardDirection <= setForwardDirection)
+				{
+					Flag_Right = 0;
+				}
+				if(Flag_Right == 0)
+				{
+					Flag_Direction =1;
+					GoForwardFlag = 1;
+					//LocationX = 0;
+				}
+			}				
+			if(LocationX > 1 || LocationY < -1)
+				GoForwardFlag = 0, Flag_Direction = 0; 
+
+
+
+
+//			setForwardDirection  = atan2( setLocationY[countNumber] - LocationY , setLocationX[countNumber] - LocationX ) * 57.3;
+//			//setForwardDirection = adjustAngle(setForwardDirection);	
+//			if( (LocationX > setLocationX[countNumber]) || (LocationY < setLocationY[countNumber]) )
+//			{
+//				countNumber++;
+//				if(countNumber > 3)
+//					Flag_Direction = 0;
+//			}
 
 	
 			
@@ -179,8 +218,8 @@ int EXTI15_10_IRQHandler(void)
 					Motor_C=Incremental_PI_C(Encoder_C,-Motor_C);         //===速度闭环控制计算电机C最终PWM
 			}	 
 //		 Xianfu_Pwm(6900);                     //===PWM限幅
-			Xianfu_Pwm_A(1500);
-			Xianfu_Pwm_BC(1000);
+			Xianfu_Pwm_A(800);
+			Xianfu_Pwm_BC(800);
 		 Set_Pwm(Motor_A,Motor_B,Motor_C);     //===赋值给PWM寄存器  
 		 }
  }
