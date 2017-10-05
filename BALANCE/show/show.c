@@ -51,14 +51,10 @@ void oled_show(void)
 //		                      OLED_ShowNumber(95,20,-Encoder_A,4,12);
 //		else                 	OLED_ShowString(80,20,"+"),
 //		                      OLED_ShowNumber(95,20, Encoder_A,4,12);
-//		if( Encoder_A<0)		OLED_ShowString(80,20,"-"),
-//		                      OLED_ShowNumber(95,20, Speed_A,4,12);
-//		else                 	OLED_ShowString(80,20,"+"),
-//		                      OLED_ShowNumber(95,20, Speed_A,4,12);
 		if( Encoder_A<0)		OLED_ShowString(80,20,"-"),
-		                      OLED_ShowNumber(95,20, setForwardDirection,4,12);
+		                      OLED_ShowNumber(95,20, Speed_A,4,12);
 		else                 	OLED_ShowString(80,20,"+"),
-		                      OLED_ShowNumber(95,20, setForwardDirection,4,12);
+		                      OLED_ShowNumber(95,20, Speed_A,4,12);
  		//=============第4行显示电机B的状态=======================//	
 		  if( Target_B<0)		OLED_ShowString(00,30,"-"),
 		                      OLED_ShowNumber(15,30,-Target_B,5,12);
@@ -158,7 +154,7 @@ void APP_Show(void)
    printf("{A%d:%d:%d:%d}$",(u8)app_2,(u8)app_3,app_4,0); //打印到APP上面
 	 else
 		 //printf("{B%d:%d:%d:%d:%f}$",(int)Pitch,(int)Roll,(int)Yaw,app_4,Speed_Forward);//打印到APP上面 显示波形
-		 printf("{B%f,%f,%f}$",setForwardDirection,LocationX,LocationY);
+		 printf("{B%f,%f,%f,%f}$",setForwardDirection,forwardDirection,LocationX,LocationY);
 //	 printf("{B%d:%d:%d:%d}$",(int)Pitch,(int)Roll,(int)Yaw,app_4);//打印到APP上面 显示波形
 }
 /**************************************************************************

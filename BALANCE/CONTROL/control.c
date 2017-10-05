@@ -113,27 +113,20 @@ int EXTI15_10_IRQHandler(void)
 			Read_DMP();  																									//===更新姿态	
 			LocationX += cos(forwardDirection*3.14159/180) * Speed_Forward * 0.015;
 			LocationY += sin(forwardDirection*3.14159/180) * Speed_Forward * 0.015;
+
+
 			setForwardDirection  = atan2( setLocationY[countNumber] - LocationY , setLocationX[countNumber] - LocationX ) * 57.3;
-			setForwardDirection = adjustAngle(setForwardDirection);	
+			//setForwardDirection = adjustAngle(setForwardDirection);	
 			if( (LocationX > setLocationX[countNumber]) || (LocationY < setLocationY[countNumber]) )
 			{
 				countNumber++;
-				if(countNumber >= 2)
+				if(countNumber > 3)
 					Flag_Direction = 0;
 			}
-			
-//			if( (LocationX>setLocationX[1]) || (LocationY<setLocationY[1]) )
-//			{
-//				countNumber++;
-//					Flag_Direction = 0;
-//			}
 
-
-
-
-
-			
 	
+			
+
 			//Read_DMP();                                                         //===更新姿态	
   		Led_Flash(100);                                                     //===LED闪烁;常规模式 1s改变一次指示灯的状态	
 			Voltage_All+=Get_battery_volt();                                    //多次采样累积
@@ -151,7 +144,10 @@ int EXTI15_10_IRQHandler(void)
 				{
 					if(GoForwardFlag == 1)
 					{
-						Motor_A= directionMotorControl((int)forwardDirection*10,(int)setForwardDirection*10);				//进行前进时候的直线调整
+						if(Flag_Direction == 1)
+							Motor_A= directionMotorControl((int)forwardDirection*10,(int)setForwardDirection*10);				//进行前进时候的直线调整
+						else
+							Motor_A = 0;
 						Motor_B=Incremental_PI_B(Encoder_B,Target_B);                         //===速度闭环控制计算电机B最终PWM
 						Motor_C=Incremental_PI_C(Encoder_C,Target_C);                         //===速度闭环控制计算电机C最终PWM
 					}
@@ -182,9 +178,9 @@ int EXTI15_10_IRQHandler(void)
 					Motor_B=Incremental_PI_B(Encoder_B,-Motor_B);         //===速度闭环控制计算电机B最终PWM
 					Motor_C=Incremental_PI_C(Encoder_C,-Motor_C);         //===速度闭环控制计算电机C最终PWM
 			}	 
-		 //Xianfu_Pwm(6900);                     //===PWM限幅
+//		 Xianfu_Pwm(6900);                     //===PWM限幅
 			Xianfu_Pwm_A(1500);
-			Xianfu_Pwm_BC(5000);
+			Xianfu_Pwm_BC(1000);
 		 Set_Pwm(Motor_A,Motor_B,Motor_C);     //===赋值给PWM寄存器  
 		 }
  }

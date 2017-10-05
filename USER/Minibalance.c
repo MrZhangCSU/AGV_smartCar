@@ -8,7 +8,7 @@ u8 Flag_Stop=1,Flag_Show=0;                 //Í£Ö¹±êÖ¾Î»ºÍ ÏÔÊ¾±êÖ¾Î» Ä¬ÈÏÍ£Ö¹ Ï
 int lineStopFlag,rotateStopFlag;	
 int Encoder_A,Encoder_B,Encoder_C;          //±àÂëÆ÷µÄÂö³å¼ÆÊý
 float Speed_A,Speed_B,Speed_C,Speed_Forward,LocationX,LocationY;					//±àÂëÆ÷»»ËãÎªËÙ¶È
-float setLocationX[2],setLocationY[2];						//×ªÍä½Úµã±£´æÊý×é
+float setLocationX[6],setLocationY[6];						//×ªÍä½Úµã±£´æÊý×é
 int countTime,countNumber;
 int controlFlag;														//½øÐÐ¿ØÖÆ±êÖ¾Î»
 int GoForwardFlag;
@@ -74,10 +74,31 @@ int main(void)
 	lineStopFlag = 0;
 	rotateStopFlag = 0;
 	countNumber = 0;
-	setLocationX[0] = 0.707;
-	setLocationX[1] = 1;
-	setLocationY[0] = -0.293;
-	setLocationY[1] = -1;
+//	setLocationX[0] = 0.707;			//·Ö³ÉÁ½¶Î
+//	setLocationX[1] = 1;
+//	setLocationY[0] = -0.293;
+//	setLocationY[1] = -1;
+	
+//	setLocationX[0] = 0.259;			//·Ö³É6¶Î
+//	setLocationX[1] = 0.5;
+//	setLocationX[2] = 0.707;
+//	setLocationX[3] = 0.866;
+//	setLocationX[4] = 0.965;
+//	setLocationX[5] = 1;
+//	setLocationY[0] = -0.034;
+//	setLocationY[1] = -0.134;
+//	setLocationY[2] = -0.5;
+//	setLocationY[3] = -0.741;
+//	setLocationY[4] = -0.965;
+//	setLocationY[5] = -1;
+
+	setLocationX[0] = 0.5;			//·Ö³É3¶Î
+	setLocationX[1] = 0.866;
+	setLocationX[2] = 1;
+	setLocationY[0] = -0.134;
+	setLocationY[1] = -0.5;
+	setLocationY[2] = -1;
+
 	
 	while(1)
 		{		
