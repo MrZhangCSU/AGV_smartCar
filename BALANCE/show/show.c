@@ -154,7 +154,7 @@ void APP_Show(void)
    printf("{A%d:%d:%d:%d}$",(u8)app_2,(u8)app_3,app_4,0); //打印到APP上面
 	 else
 		 //printf("{B%d:%d:%d:%d:%f}$",(int)Pitch,(int)Roll,(int)Yaw,app_4,Speed_Forward);//打印到APP上面 显示波形
-		 printf("{B%f,%f,%f,%f，%d}$",setForwardDirection,forwardDirection,LocationX,LocationY,controlFlag);
+		 printf("{B%f,%f,%f,%f，S%d}$",setForwardDirection,forwardDirection,LocationX,LocationY,controlFlag);
 //	 printf("{B%d:%d:%d:%d}$",(int)Pitch,(int)Roll,(int)Yaw,app_4);//打印到APP上面 显示波形
 }
 /**************************************************************************

@@ -70,7 +70,7 @@ int main(void)
 	delay_flag=1;	
 	delay_50=0;
 	while(delay_flag);	       //通过MPU6050的INT中断实现的50ms精准延时	
-	GoForwardFlag = 2;
+	GoForwardFlag = 1;
 	lineStopFlag = 0;
 	rotateStopFlag = 0;
 	countNumber = 0;
@@ -116,8 +116,8 @@ int main(void)
   		{
 				DataScope();             //开启MiniBalance上位机
 			}	
-			if(controlFlag == 0 ) controlFlag += 1;				//是否直行中断电机控制标志位
-			if(controlFlag <= 1) 	Flag_Direction = 1 , Flag_Left = 0 , Flag_Right = 0 , controlFlag += 1;    //Flag_Left = 1, controlFlag +=1;
+			if(controlFlag == 0 ) controlFlag += 1, Flag_Direction = 1 , Flag_Left = 0 , Flag_Right = 0 ;				//是否直行中断电机控制标志位
+			//if(controlFlag == 1) 	Flag_Direction = 0 , Flag_Left = 0 , Flag_Right = 1 ;    //Flag_Left = 1, controlFlag +=1;
 			delay_flag=1;	
 			delay_50=0;
 			while(delay_flag);	       //通过MPU6050的INT中断实现的50ms精准延时				

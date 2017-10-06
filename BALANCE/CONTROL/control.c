@@ -171,7 +171,7 @@ int EXTI15_10_IRQHandler(void)
 								GoForwardFlag =0;
 								Flag_Right = 0;
 								Flag_Left = 0;
-								controlFlag = 0;
+								controlFlag = 4;
 							Set_Pwm(0,0,0);
 						}
 
@@ -212,7 +212,7 @@ int EXTI15_10_IRQHandler(void)
 		  if(CAN_ON_Flag==1||Usart_ON_Flag==1) CAN_N_Usart_Control();       //接到串口或者CAN遥控解锁指令之后，使能CAN和串口控制输入
 			if(RC_Velocity>0&&RC_Velocity<25)  RC_Velocity=25;                //避免电机进入低速非线性区
 
-		 if(Turn_Off(Voltage)==0 || (controlFlag>0))               //===如果电池电压不存在异常
+		 if(Turn_Off(Voltage)==0 && (controlFlag!=4))               //===如果电池电压不存在异常
 		 { 			 
 		  if(Run_Flag==0)//速度模式
 			{		
@@ -261,8 +261,8 @@ int EXTI15_10_IRQHandler(void)
 			Xianfu_Pwm_BC(800);
 		 Set_Pwm(Motor_A,Motor_B,Motor_C);     //===赋值给PWM寄存器  
 		 }
-		 else
-			 Set_Pwm(0,0,0);
+		 else	
+			 Xianfu_Pwm(10);
  }
 	 return 0;	 
 } 
