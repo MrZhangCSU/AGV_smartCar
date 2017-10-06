@@ -70,7 +70,7 @@ int main(void)
 	delay_flag=1;	
 	delay_50=0;
 	while(delay_flag);	       //通过MPU6050的INT中断实现的50ms精准延时	
-	GoForwardFlag = 1;
+	GoForwardFlag = 2;
 	lineStopFlag = 0;
 	rotateStopFlag = 0;
 	countNumber = 0;

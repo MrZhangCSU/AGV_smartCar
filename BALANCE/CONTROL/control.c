@@ -108,48 +108,87 @@ int EXTI15_10_IRQHandler(void)
 //				}
 //			}
 			
-			Read_DMP();  																									//===更新姿态				
-			if (GoForwardFlag == 1)
-			{
-				LocationX += cos(forwardDirection*3.14159/180) * Speed_Forward * 0.015;
-				LocationY += sin(forwardDirection*3.14159/180) * Speed_Forward * 0.015;
-				if( (LocationX > setLocationX[countNumber]) || (LocationY < setLocationY[countNumber]) )
+//			Read_DMP();  																									//===更新姿态				
+//			if (GoForwardFlag == 1)
+//			{
+//				LocationX += cos(forwardDirection*3.14159/180) * Speed_Forward * 0.015;
+//				LocationY += sin(forwardDirection*3.14159/180) * Speed_Forward * 0.015;
+//				if( (LocationX > setLocationX[countNumber]) || (LocationY < setLocationY[countNumber]) )
+//				{
+//					Flag_Direction=0;
+//					lineStopFlag = 1;
+//					countNumber++;
+//				}
+//					
+//				if (lineStopFlag == 1)
+//				{
+//					lineStopFlag = 0;
+//					Flag_Left=0;
+//					Flag_Right=1;
+//					GoForwardFlag=2;
+//					setForwardDirection  = atan2( setLocationY[countNumber] - LocationY , setLocationX[countNumber] - LocationX ) * 57.3;					
+//					setForwardDirection = adjustAngle(setForwardDirection);	
+//					if(countNumber > 6)
+//						GoForwardFlag = 0,Flag_Direction = 0,controlFlag = 0;
+//				}
+//			}
+//			else if(GoForwardFlag == 2)
+//			{
+//				if ((forwardDirection>0)&&(setForwardDirection <0))						//避免在交界点出问题
+//					forwardDirection -= 360;
+//				if (forwardDirection <= setForwardDirection+5)
+//				{
+//					Flag_Right = 0;
+//				}
+//				if(Flag_Right == 0)
+//				{
+//					Flag_Direction =1;
+//					GoForwardFlag = 1;
+//				}
+//			}				
+//			if(LocationX > 1 || LocationY < -1)
+//				GoForwardFlag = 0, Flag_Direction = 0,controlFlag = 0; 
+
+				Read_DMP();
+				setForwardDirection = atan2(setLocationY[countNumber]-LocationY,setLocationX[countNumber]-LocationX) * 57.3;
+				if(GoForwardFlag == 1)
 				{
-					Flag_Direction=0;
-					//LocationX=0;
-					lineStopFlag = 1;
-					countNumber++;
-					if(countNumber > 6)
-						GoForwardFlag = 0,Flag_Direction = 0;
+						LocationX += cos(forwardDirection*3.14/180)*Speed_Forward*0.015;
+						LocationY += sin(forwardDirection*3.14/180)*Speed_Forward*0.015;
+						if(countNumber<6)
+						{
+								if(LocationX > setLocationX[countNumber] || LocationY < setLocationY[countNumber])
+								{
+										countNumber++;
+										Flag_Direction = 0;
+										GoForwardFlag = 2;
+										Flag_Right = 1;
+								}
+						}
+						else if(LocationX > 1 || LocationY < -1)
+						{
+								Flag_Direction = 0;
+								GoForwardFlag =0;
+								Flag_Right = 0;
+								Flag_Left = 0;
+								controlFlag = 0;
+							Set_Pwm(0,0,0);
+						}
+
 				}
-					
-				if (lineStopFlag == 1)
+				else if(GoForwardFlag == 2)
 				{
-					lineStopFlag = 0;
-					Flag_Left=0;
-					Flag_Right=1;
-					GoForwardFlag=2;
-					setForwardDirection  = atan2( setLocationY[countNumber] - LocationY , setLocationX[countNumber] - LocationX ) * 57.3;					
-					//setForwardDirection = adjustAngle(setForwardDirection);	
+						
+						if(forwardDirection>0 && setForwardDirection<0)
+								forwardDirection -=360;
+						if(forwardDirection <= setForwardDirection +5)
+						{
+								Flag_Right = 0;
+								Flag_Direction = 1;
+								GoForwardFlag = 1;
+						}
 				}
-			}
-			else if(GoForwardFlag == 2)
-			{
-				if ((forwardDirection>0)&&(setForwardDirection <0))						//避免在交界点出问题
-					forwardDirection -= 360;
-				if (forwardDirection <= setForwardDirection)
-				{
-					Flag_Right = 0;
-				}
-				if(Flag_Right == 0)
-				{
-					Flag_Direction =1;
-					GoForwardFlag = 1;
-					//LocationX = 0;
-				}
-			}				
-			if(LocationX > 1 || LocationY < -1)
-				GoForwardFlag = 0, Flag_Direction = 0; 
+
 
 
 
@@ -173,7 +212,7 @@ int EXTI15_10_IRQHandler(void)
 		  if(CAN_ON_Flag==1||Usart_ON_Flag==1) CAN_N_Usart_Control();       //接到串口或者CAN遥控解锁指令之后，使能CAN和串口控制输入
 			if(RC_Velocity>0&&RC_Velocity<25)  RC_Velocity=25;                //避免电机进入低速非线性区
 
-		 if(Turn_Off(Voltage)==0)               //===如果电池电压不存在异常
+		 if(Turn_Off(Voltage)==0 || (controlFlag>0))               //===如果电池电压不存在异常
 		 { 			 
 		  if(Run_Flag==0)//速度模式
 			{		
@@ -185,7 +224,7 @@ int EXTI15_10_IRQHandler(void)
 					{
 						if(Flag_Direction == 1)
 							Motor_A= directionMotorControl((int)forwardDirection*10,(int)setForwardDirection*10);				//进行前进时候的直线调整
-						else
+						else if(Flag_Direction == 0)
 							Motor_A = 0;
 						Motor_B=Incremental_PI_B(Encoder_B,Target_B);                         //===速度闭环控制计算电机B最终PWM
 						Motor_C=Incremental_PI_C(Encoder_C,Target_C);                         //===速度闭环控制计算电机C最终PWM
@@ -222,6 +261,8 @@ int EXTI15_10_IRQHandler(void)
 			Xianfu_Pwm_BC(800);
 		 Set_Pwm(Motor_A,Motor_B,Motor_C);     //===赋值给PWM寄存器  
 		 }
+		 else
+			 Set_Pwm(0,0,0);
  }
 	 return 0;	 
 } 
